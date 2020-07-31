@@ -3,7 +3,7 @@ project(Successor)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Successor main.cpp)
+add_executable(Successor src/main.cpp)
 
 add_subdirectory(lib/Ludere)
 

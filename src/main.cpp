@@ -3,6 +3,7 @@
 
 int main()
 {
+    printf("This is a demonstration of how to use Ludere");
     std::unique_ptr<lud::Exchange> exchange = std::unique_ptr<lud::Exchange>(new lud::Exchange());
     return 0;
 }
