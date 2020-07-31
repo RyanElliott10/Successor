@@ -1,0 +1,3 @@
+[submodule "lib/Ludere"]
+	path = lib/Ludere
+	url = https://github.com/RyanElliott10/Ludere.git
