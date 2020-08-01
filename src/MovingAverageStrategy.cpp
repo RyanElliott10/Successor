@@ -6,5 +6,5 @@
 
 void MovingAverageStrategy::notifyOfMarketEvent(lud::MarketEvent &event)
 {
-    Strategy::notifyOfMarketEvent(event);
+
 }
