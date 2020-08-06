@@ -8,3 +8,14 @@ void MovingAverageStrategy::notifyOfMarketEvent(lud::MarketEvent &event)
 {
 
 }
+
+void MovingAverageStrategy::handleMarketData(lud::CandlestickData &data)
+{
+    AbstractStrategy::handleMarketData(data);
+    std::cout << data << std::endl;
+}
+
+void MovingAverageStrategy::trade()
+{
+    AbstractStrategy::trade();
+}

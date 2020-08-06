@@ -6,12 +6,20 @@
 #define SUCCESSOR_MOVINGAVERAGESTRATEGY_HPP
 
 
-#include <ludere/Strategy.hpp>
+#include <ludere/AbstractStrategy.hpp>
 
-class MovingAverageStrategy : public lud::Strategy
+class MovingAverageStrategy : public lud::AbstractStrategy
 {
 public:
+    MovingAverageStrategy(lud::Portfolio &portfolio, bool currentData)
+            : lud::AbstractStrategy(portfolio, currentData)
+    {}
+
+    void trade() override;
+
     void notifyOfMarketEvent(lud::MarketEvent &event) override;
+
+    void handleMarketData(lud::CandlestickData &data) override;
 };
 
 

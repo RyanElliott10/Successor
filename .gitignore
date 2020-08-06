@@ -1,7 +1,9 @@
 # IDE-specific
-.idea/
-build/
+.idea/*
+build/*
+data/*
 *.DS_Store
+venv/*
 
 # Prerequisites
 *.d
