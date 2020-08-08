@@ -12,11 +12,14 @@ int main()
     lud::Exchange exchange(AAPL_CSV, false);
     lud::Portfolio portfolio(exchange, 100, 100);
 
-    std::unordered_set<std::unique_ptr<lud::AbstractStrategy>> strategies;
-    std::unique_ptr<lud::AbstractStrategy> maStrat = std::make_unique<MovingAverageStrategy>(portfolio, true);
-    strategies.insert(std::move(maStrat));
+    std::unordered_set<std::shared_ptr<lud::AbstractStrategy>> strategies;
+    std::shared_ptr<lud::AbstractStrategy> maStrat = std::make_shared<MovingAverageStrategy>(portfolio, true);
 
     lud::Engine engine(exchange, strategies);
+
+    strategies.insert(maStrat);
+    exchange.subscribeToDataStream(maStrat);
+
     engine.trade();
 
     return 0;

@@ -4,6 +4,7 @@ build/*
 data/*
 *.DS_Store
 venv/*
+*.txt
 
 # Prerequisites
 *.d

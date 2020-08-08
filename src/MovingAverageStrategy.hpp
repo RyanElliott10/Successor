@@ -15,11 +15,12 @@ public:
             : lud::AbstractStrategy(portfolio, currentData)
     {}
 
+    ~MovingAverageStrategy() override = default;
+
     void trade() override;
-
     void notifyOfMarketEvent(lud::MarketEvent &event) override;
-
     void handleMarketData(lud::CandlestickData &data) override;
+    void prepareToTrade() override;
 };
 
 
