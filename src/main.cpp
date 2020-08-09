@@ -10,7 +10,7 @@
 int main()
 {
     lud::Exchange exchange(AAPL_CSV, false);
-    lud::Portfolio portfolio(exchange, 100, 100);
+    lud::Portfolio portfolio(exchange, 10000);
 
     std::unordered_set<std::shared_ptr<lud::AbstractStrategy>> strategies;
     std::shared_ptr<lud::AbstractStrategy> maStrat = std::make_shared<MovingAverageStrategy>(portfolio, true);
