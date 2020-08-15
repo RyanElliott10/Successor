@@ -111,3 +111,5 @@ fabric.properties
 *.exe
 *.out
 *.app
+.idea/vcs.xml
+.idea/codeStyles/codeStyleConfig.xml

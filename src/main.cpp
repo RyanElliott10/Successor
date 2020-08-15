@@ -1,5 +1,6 @@
 #include <unordered_set>
 
+#include <ludere/IDataEventSubscriber.hpp>
 #include <ludere/Engine.hpp>
 #include <ludere/Exchange.hpp>
 
@@ -10,7 +11,7 @@
 int main()
 {
     lud::Exchange exchange(AAPL_CSV, false);
-    lud::Portfolio portfolio(exchange, 10000);
+    lud::Portfolio portfolio(exchange, 1000);
 
     std::unordered_set<std::shared_ptr<lud::AbstractStrategy>> strategies;
     std::shared_ptr<lud::AbstractStrategy> maStrat = std::make_shared<MovingAverageStrategy>(portfolio, true);
@@ -18,7 +19,8 @@ int main()
     lud::Engine engine(exchange, strategies);
 
     strategies.insert(maStrat);
-    exchange.subscribeToDataStream(maStrat);
+    std::unordered_set<std::string> securities = {"AAPL"};
+    exchange.subscribeToDataStream(std::make_shared<lud::DataEventSubscription>(maStrat, securities));
 
     engine.trade();
 

@@ -18,9 +18,10 @@ public:
     ~MovingAverageStrategy() override = default;
 
     void trade() override;
+    void prepareToTrade() override;
     void notifyOfMarketEvent(lud::MarketEvent &event) override;
     void handleMarketData(lud::CandlestickData &data) override;
-    void prepareToTrade() override;
+    void handleConcludedOrder(std::shared_ptr<lud::FilledOrder> ) override;
 };
 
 
