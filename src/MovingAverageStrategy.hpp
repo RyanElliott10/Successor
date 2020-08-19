@@ -11,7 +11,7 @@
 class MovingAverageStrategy : public lud::AbstractStrategy
 {
 public:
-    MovingAverageStrategy(lud::Portfolio &portfolio, bool currentData)
+    MovingAverageStrategy(std::shared_ptr<lud::Portfolio> portfolio, bool currentData)
             : lud::AbstractStrategy(portfolio, currentData)
     {}
 
@@ -20,8 +20,8 @@ public:
     void trade() override;
     void prepareToTrade() override;
     void notifyOfMarketEvent(lud::MarketEvent &event) override;
-    void handleMarketData(lud::CandlestickData &data) override;
-    void handleConcludedOrder(std::shared_ptr<lud::FilledOrder> ) override;
+    void handleMarketData(const std::unordered_map<std::string, lud::CandlestickData> &data) override;
+    void handleConcludedOrder(std::shared_ptr<lud::FilledOrder>) override;
 };
 
 

@@ -3,7 +3,7 @@ project(Successor)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Successor src/main.cpp src/MovingAverageStrategy.cpp src/MovingAverageStrategy.hpp)
+add_executable(Successor src/main.cpp src/MovingAverageStrategy.cpp src/MovingAverageStrategy.hpp src/DataStreamer.hpp)
 
 add_subdirectory(lib/Ludere)
 

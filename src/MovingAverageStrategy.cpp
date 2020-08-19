@@ -13,7 +13,7 @@ void MovingAverageStrategy::trade()
 
 void MovingAverageStrategy::prepareToTrade()
 {
-    // Subscribe to an Exchange SSE feed, etc.
+
 }
 
 void MovingAverageStrategy::notifyOfMarketEvent(lud::MarketEvent &event)
@@ -21,13 +21,12 @@ void MovingAverageStrategy::notifyOfMarketEvent(lud::MarketEvent &event)
 
 }
 
-void MovingAverageStrategy::handleMarketData(lud::CandlestickData &data)
+void MovingAverageStrategy::handleMarketData(const std::unordered_map<std::string, lud::CandlestickData> &data)
 {
-    std::cout << data.ticker << " " << data << std::endl;
-    placeLimitOrder(data.ticker, 1, lud::Order::PositionType::kLongPosition, data.low);
+    placeLimitOrder("TSLA", 1, lud::Order::PositionType::kLongPosition, data.at("TSLA").low);
 }
 
 void MovingAverageStrategy::handleConcludedOrder(std::shared_ptr<lud::FilledOrder> filledOrder)
 {
-    std::cout << "handleConcludedOrder" << std::endl;
+    LUD_DEBUG("Order concluded: %s at: $%.2f per share", filledOrder->security.c_str(), filledOrder->sharePrice)
 }
