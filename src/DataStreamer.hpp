@@ -33,7 +33,6 @@ public:
         uint32_t volume;
         if (readNextRow(timestamp, open, high, low, close, volume)) {
             lud::CandlestickData candle("TSLA", DataStreamer::time_t_from_string(timestamp), open, high, low, close, volume);
-            std::cout << candle << std::endl;
             return std::unordered_map<std::string, lud::CandlestickData> { std::make_pair(candle.ticker, candle) };
         }
 
