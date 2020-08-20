@@ -12,7 +12,7 @@ constexpr std::string_view TSLA_CSV = "../data/tsla_minute.csv";
 
 int main()
 {
-    std::shared_ptr<DataStreamer> dataStream = std::make_shared<DataStreamer>(TSLA_CSV);
+    std::shared_ptr<lud::IDataStreamer> dataStream = std::make_shared<DataStreamer>(TSLA_CSV);
     lud::Exchange exchange(dataStream, false);
     std::shared_ptr<lud::Portfolio> portfolio = std::make_shared<lud::Portfolio>(exchange, 1000);
 

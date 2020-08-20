@@ -23,7 +23,9 @@ void MovingAverageStrategy::notifyOfMarketEvent(lud::MarketEvent &event)
 
 void MovingAverageStrategy::handleMarketData(const std::unordered_map<std::string, lud::CandlestickData> &data)
 {
-    placeLimitOrder("TSLA", 1, lud::Order::PositionType::kLongPosition, data.at("TSLA").low);
+    if (data.at("TSLA").close * 1.01 <= 225) {
+        placeLimitOrder("TSLA", 1, lud::Order::PositionType::kLongPosition, data.at("TSLA").close);
+    }
 }
 
 void MovingAverageStrategy::handleConcludedOrder(std::shared_ptr<lud::FilledOrder> filledOrder)
