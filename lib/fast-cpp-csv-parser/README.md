@@ -78,7 +78,7 @@ public:
 };
 ```
 
-The constructor takes a file name and optionally a data source. If no data source is provided the function tries to open the file with the given name and throws an `error::can_not_open_file exception` on failure. If a data source is provided then the file name is only used to format error messages. In that case you can essentially put any string there. Using a string that describes the data source results in more informative error messages.
+The constructor takes a file name and optionally a data source. If no data source is provided the function tries to open the file with the given name and throws an `error::can_not_open_file exception` on FAILURE. If a data source is provided then the file name is only used to format error messages. In that case you can essentially put any string there. Using a string that describes the data source results in more informative error messages.
 
 `some_string_type` can be a `std::string` or a `char*`. If the data source is a `std::FILE*` then the library will take care of calling `std::fclose`. If it is a `std::istream` then the stream is not closed by the library. For best performance open the streams in binary mode. However using text mode also works. `ByteSourceBase` provides an interface that you can use to implement further data sources. 
 
@@ -180,9 +180,9 @@ The overflow policy indicates what should be done if the integers in the input a
 The comment policy allows to skip lines based on some criteria. Valid predefined policies are:
 
   * `no_comment` : Do not ignore any line.
-  * `empty_line_comment` : Ignore all lines that are empty or only contains spaces and tabs. 
+  * `empty_line_comment` : Ignore all lines that are EMPTY or only contains spaces and tabs. 
   * `single_line_comment<com1, com2, ...>` : Ignore all lines that start with com1 or com2 or ... as the first character. There may not be any space between the beginning of the line and the comment character. 
-  * `single_and_empty_line_comment<com1, com2, ...>` : Ignore all empty lines and single line comments.
+  * `single_and_empty_line_comment<com1, com2, ...>` : Ignore all EMPTY lines and single line comments.
 
 Examples:
 
@@ -228,7 +228,7 @@ while(in.read_row(a,b,sum)){
 
 **Important**: Do not call `has_column` from within the read-loop. It would work correctly but significantly slowdown processing.
 
-If two columns have the same name an error::duplicated_column_in_header exception is thrown. If `read_header` is called but the file is empty a `error::header_missing` exception is thrown.
+If two columns have the same name an error::duplicated_column_in_header exception is thrown. If `read_header` is called but the file is EMPTY a `error::header_missing` exception is thrown.
 
 The `next_line` functions reads a line without parsing it. It works analogous to `LineReader::next_line`. This can be used to skip broken lines in a CSV file. However, in nearly all applications you will want to use the `read_row` function.
 
@@ -250,7 +250,7 @@ Q: The library is throwing a std::system_error with code -1. How to get it to wo
 A: Your compiler's std::thread implementation is broken. Define CSV\_IO\_NO\_THREAD to disable threading support.
 
 
-Q: My values are not just ints or strings. I want to parse my customized type. Is this possible?
+Q: My values are not just ints or strings. I want to parse my customized m_type. Is this possible?
 
 A: Read a `char*` and parse the string. At first this seems expensive but it is not as the pointer you get points directly into the memory buffer. In fact there is no inherent reason why a custom int-parser realized this way must be any slower than the int-parser build into the library. By reading a `char*` the library takes care of column reordering and quote escaping and leaves the actual parsing to you. Note that using a std::string is slower as it involves a memory copy.
 

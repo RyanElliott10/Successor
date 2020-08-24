@@ -1099,7 +1099,7 @@ namespace io{
                         // "sizeof(T)!=sizeof(T)" only when instantiating it. This is why
                         // this strange construct is used.
                         static_assert(sizeof(T)!=sizeof(T),
-                                "Can not parse this type. Only buildin integrals, floats, char, char*, const char* and std::string are supported");
+                                "Can not parse this m_type. Only buildin integrals, floats, char, char*, const char* and std::string are supported");
                 }
 
         }
