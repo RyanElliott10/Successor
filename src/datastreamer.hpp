@@ -2,25 +2,25 @@
 // Created by Ryan Elliott on 8/14/20.
 //
 
-#ifndef SUCCESSOR_DATA_STREAMER_HPP
-#define SUCCESSOR_DATA_STREAMER_HPP
+#ifndef SUCCESSOR_DATASTREAMER_HPP
+#define SUCCESSOR_DATASTREAMER_HPP
 
 
 #include <ludere/candlestick_data.hpp>
-#include <ludere/data_streamable.hpp>
+#include <ludere/datastreamable.hpp>
 #include <ParseCSV/csv.h>
 
 // TODO: Design multiple ticker streaming support. Ludere supports this, however the demo code does not display this
-class data_streamer : public lud::data_streamable
+class datastreamer : public lud::datastreamable
 {
 public:
-    explicit data_streamer(std::string filename_)
+    explicit datastreamer(std::string filename_)
             : m_filename(std::move(filename_)), m_file(io::CSVReader<6>(m_filename))
     {
         m_file.read_header(io::ignore_extra_column, "timestamp", "open", "high", "low", "close", "volume");
     }
 
-    explicit data_streamer(std::string_view filename_)
+    explicit datastreamer(std::string_view filename_)
             : m_filename(filename_), m_file(io::CSVReader<6>(m_filename))
     {
         m_file.read_header(io::ignore_extra_column, "timestamp", "open", "high", "low", "close", "volume");
@@ -31,23 +31,27 @@ public:
         std::string timestamp_;
         float open_, high_, low_, close_;
         uint32_t volume_;
-        if (readNextRow(timestamp_, open_, high_, low_, close_, volume_)) {
-            lud::candlestick_data candle_("AAPL", data_streamer::time_t_from_string(timestamp_), open_, high_, low_,
+        if (read_next_row(timestamp_, open_, high_, low_, close_, volume_)) {
+            // TODO: Derive the ticker from the CSV
+            lud::candlestick_data candle_("TSLA", datastreamer::time_t_from_string(timestamp_), open_, high_, low_,
                                           close_, volume_);
-            return std::unordered_map<std::string, lud::candlestick_data>{std::make_pair(candle_.m_ticker, candle_)};
+            lud::candlestick_data timestamp_candle_("timestamp");
+            return std::unordered_map<std::string, lud::candlestick_data>{std::make_pair(candle_.m_ticker, candle_),
+                                                                          std::make_pair("timestamp",
+                                                                                         timestamp_candle_)};
         }
 
         return std::unordered_map<std::string, lud::candlestick_data>{};
     }
 
-    bool readNextRow(std::string &timestamp, float &open, float &high, float &low, float &close, uint32_t &volume)
+    bool read_next_row(std::string &timestamp, float &open, float &high, float &low, float &close, uint32_t &volume)
     {
         try {
             m_file.read_row(timestamp, open, high, low, close, volume);
             return !timestamp.empty();
         } catch (const io::error::no_digit &e) {
             LUD_WARN("Error parsing CSV row (io::error::no_digit), continuing to next: %s", e.what());
-            return readNextRow(timestamp, open, high, low, close, volume);
+            return read_next_row(timestamp, open, high, low, close, volume);
         } catch (...) {
             return false;
         }
@@ -86,4 +90,4 @@ private:
 };
 
 
-#endif //SUCCESSOR_DATA_STREAMER_HPP
+#endif //SUCCESSOR_DATASTREAMER_HPP

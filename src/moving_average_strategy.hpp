@@ -2,21 +2,21 @@
 // Created by Ryan Elliott on 7/31/20.
 //
 
-#ifndef SUCCESSOR_MOVINGAVERAGESTRATEGY_HPP
-#define SUCCESSOR_MOVINGAVERAGESTRATEGY_HPP
+#ifndef SUCCESSOR_MOVING_AVERAGE_STRATEGY_HPP
+#define SUCCESSOR_MOVING_AVERAGE_STRATEGY_HPP
 
 
 #include <ludere/abstract_strategy.hpp>
 #include <utility>
 
-class MovingAverageStrategy : public lud::abstract_strategy
+class moving_average_strategy : public lud::abstract_strategy
 {
 public:
-    MovingAverageStrategy(std::shared_ptr<lud::portfolio> portfolio, bool currentData)
+    moving_average_strategy(std::shared_ptr<lud::portfolio> portfolio, bool currentData)
             : lud::abstract_strategy(std::move(portfolio), currentData)
     {}
 
-    ~MovingAverageStrategy() override = default;
+    ~moving_average_strategy() override = default;
 
     void trade() override;
     void prepare_to_trade() override;
@@ -32,4 +32,4 @@ private:
 };
 
 
-#endif //SUCCESSOR_MOVINGAVERAGESTRATEGY_HPP
+#endif //SUCCESSOR_MOVING_AVERAGE_STRATEGY_HPP
