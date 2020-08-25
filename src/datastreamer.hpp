@@ -35,7 +35,7 @@ public:
             // TODO: Derive the ticker from the CSV
             lud::candlestick_data candle_("TSLA", datastreamer::time_t_from_string(timestamp_), open_, high_, low_,
                                           close_, volume_);
-            lud::candlestick_data timestamp_candle_("timestamp");
+            lud::candlestick_data timestamp_candle_("timestamp", datastreamer::time_t_from_string(timestamp_));
             return std::unordered_map<std::string, lud::candlestick_data>{std::make_pair(candle_.m_ticker, candle_),
                                                                           std::make_pair("timestamp",
                                                                                          timestamp_candle_)};

@@ -25,7 +25,7 @@ void moving_average_strategy::handle_market_data(const std::unordered_map<std::s
 {
     std::string interested_security_ = "TSLA";
     lud::order_lifetime lifetime(lud::enums::order::lifetime_durations::DAY, data.at(interested_security_).m_timestamp);
-    if (m_portfolio->verify_capital(data.at(interested_security_).m_close)) {
+    if (m_portfolio->soft_verify_capital(data.at(interested_security_).m_close)) {
         place_limit_order(interested_security_, 1, lud::enums::order::signals::BUY, lud::enums::order::position_types::LONG, lifetime,
                           data.at(interested_security_).m_close);
     }

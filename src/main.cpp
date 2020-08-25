@@ -16,6 +16,9 @@ int main()
     lud::exchange exchange_(datastream_, false);
     std::shared_ptr<lud::portfolio> portfolio_ = std::make_shared<lud::portfolio>(exchange_, 1000);
 
+    lud::brokerage_fees brokerage_fees_(3.0f);
+    portfolio_->set_brokerage_fees(brokerage_fees_);
+
     std::unordered_set<std::shared_ptr<lud::abstract_strategy>> strategies_;
     std::shared_ptr<lud::abstract_strategy> ma_strategy_ = std::make_shared<moving_average_strategy>(portfolio_, true);
 
