@@ -26,8 +26,6 @@ public:
 
 private:
     std::vector<lud::candlestick_data> m_historicalData;
-    // TODO: Implement a custom class, pop_vector<m_type, max_size> that stores up to max_size elements and pops
-    //      max_size+1 off when a new member is pushed
     std::array<float, 50> m_50movingAverageCloses;
 };
 

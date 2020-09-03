@@ -8,13 +8,17 @@
 #include "moving_average_strategy.hpp"
 
 constexpr std::string_view AAPL_CSV = "../data/aapl_daily.csv";
+constexpr std::string_view SQ_CSV = "../data/sq_daily.csv";
 constexpr std::string_view TSLA_CSV = "../data/tsla_minute.csv";
 
 int main()
 {
-    std::shared_ptr<lud::datastreamable> datastream_ = std::make_shared<datastreamer>(TSLA_CSV);
+    const std::unordered_map<std::string, std::string_view> csvs = {
+            std::make_pair("AAPL", AAPL_CSV), std::make_pair("SQ", SQ_CSV)
+    };
+    std::shared_ptr<lud::datastreamable> datastream_ = std::make_shared<datastreamer>(csvs);
     lud::exchange exchange_(datastream_, false);
-    std::shared_ptr<lud::portfolio> portfolio_ = std::make_shared<lud::portfolio>(exchange_, 1000);
+    std::shared_ptr<lud::portfolio> portfolio_ = std::make_shared<lud::portfolio>(exchange_, 500);
 
     lud::brokerage_fees brokerage_fees_(3.0f);
     portfolio_->set_brokerage_fees(brokerage_fees_);
@@ -23,7 +27,7 @@ int main()
     std::shared_ptr<lud::abstract_strategy> ma_strategy_ = std::make_shared<moving_average_strategy>(portfolio_, true);
 
     lud::engine engine_(exchange_, strategies_);
-    std::unordered_set<std::string> securities_ = { "TSLA" };
+    std::unordered_set<std::string> securities_ = { "SQ" };
 
     strategies_.insert(ma_strategy_);
     exchange_.subscribe_to_datastream(std::make_shared<lud::data_event_subscription>(ma_strategy_, securities_));

@@ -10,48 +10,55 @@
 #include <ludere/datastreamable.hpp>
 #include <ParseCSV/csv.h>
 
-// TODO: Design multiple ticker streaming support. Ludere supports this, however the demo code does not display this
+// TODO: Add safety around streaming multiple tickers on different timeframes
 class datastreamer : public lud::datastreamable
 {
 public:
-    explicit datastreamer(std::string filename_)
-            : m_filename(std::move(filename_)), m_file(io::CSVReader<6>(m_filename))
+    explicit datastreamer(const std::unordered_map<std::string, std::string_view> &filenames_)
+            : m_filenames(filenames_)
     {
-        m_file.read_header(io::ignore_extra_column, "timestamp", "open", "high", "low", "close", "volume");
-    }
+        for (const auto &[instrument_name_, file_] : filenames_) {
+            auto file = std::make_unique<io::CSVReader<6>>(std::string{file_});
+            file->read_header(io::ignore_extra_column, "timestamp", "open", "high", "low", "close", "volume");
+            m_files.emplace(std::string{instrument_name_}, std::move(file));
 
-    explicit datastreamer(std::string_view filename_)
-            : m_filename(filename_), m_file(io::CSVReader<6>(m_filename))
-    {
-        m_file.read_header(io::ignore_extra_column, "timestamp", "open", "high", "low", "close", "volume");
+        }
     }
 
     std::unordered_map<std::string, lud::candlestick_data> poll_next_stream() override
     {
+        std::unordered_map<std::string, lud::candlestick_data> candles;
         std::string timestamp_;
         float open_, high_, low_, close_;
         uint32_t volume_;
-        if (read_next_row(timestamp_, open_, high_, low_, close_, volume_)) {
-            // TODO: Derive the ticker from the CSV
-            lud::candlestick_data candle_("TSLA", datastreamer::time_t_from_string(timestamp_), open_, high_, low_,
-                                          close_, volume_);
-            lud::candlestick_data timestamp_candle_("timestamp", datastreamer::time_t_from_string(timestamp_));
-            return std::unordered_map<std::string, lud::candlestick_data>{std::make_pair(candle_.m_ticker, candle_),
-                                                                          std::make_pair("timestamp",
-                                                                                         timestamp_candle_)};
+        bool is_valid_ = false;
+        for (auto &[instrument_name_, file_] : m_files) {
+            if (read_next_row(file_, timestamp_, open_, high_, low_, close_, volume_)) {
+                lud::candlestick_data candle_(instrument_name_, datastreamer::time_t_from_string(timestamp_), open_, high_, low_,
+                                              close_, volume_);
+                candles.emplace(candle_.m_ticker, candle_);
+                is_valid_ = true;
+            }
         }
 
-        return std::unordered_map<std::string, lud::candlestick_data>{};
+        if (is_valid_) {
+            lud::candlestick_data timestamp_candle_("timestamp", datastreamer::time_t_from_string(timestamp_));
+            candles.emplace(timestamp_candle_.m_ticker, timestamp_candle_);
+        }
+        return candles;
     }
 
-    bool read_next_row(std::string &timestamp, float &open, float &high, float &low, float &close, uint32_t &volume)
+    bool
+    read_next_row(std::unique_ptr<io::CSVReader<6>> &file_, std::string &timestamp, float &open, float &high,
+                  float &low, float &close,
+                  uint32_t &volume)
     {
         try {
-            m_file.read_row(timestamp, open, high, low, close, volume);
+            file_->read_row(timestamp, open, high, low, close, volume);
             return !timestamp.empty();
         } catch (const io::error::no_digit &e) {
             LUD_WARN("Error parsing CSV row (io::error::no_digit), continuing to next: %s", e.what());
-            return read_next_row(timestamp, open, high, low, close, volume);
+            return read_next_row(file_, timestamp, open, high, low, close, volume);
         } catch (...) {
             return false;
         }
@@ -85,8 +92,8 @@ public:
     }
 
 private:
-    const std::string m_filename;
-    io::CSVReader<6> m_file;
+    const std::unordered_map<std::string, std::string_view> m_filenames;
+    std::unordered_map<std::string, std::unique_ptr<io::CSVReader<6>>> m_files; // smart pointer since copy cstrs are deleted
 };
 
 
