@@ -92,8 +92,8 @@ public:
   }
 
 private:
-  const std::unordered_map<std::string, std::string_view> m_filenames;
-  std::unordered_map<std::string, std::unique_ptr<io::CSVReader<6>>> m_files; // smart pointer since copy cstrs are deleted
+  const std::unordered_map<std::string, std::string_view> m_filenames {};
+  std::unordered_map<std::string, std::unique_ptr<io::CSVReader<6>>> m_files {}; // smart pointer since copy cstrs are deleted
 };
 
 

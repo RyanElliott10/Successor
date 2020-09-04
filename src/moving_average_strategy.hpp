@@ -26,7 +26,7 @@ public:
 
 private:
   std::vector<lud::candlestick_data> m_historicalData;
-  std::array<float, 50> m_50movingAverageCloses;
+  std::array<float, 50> m_50movingAverageCloses {};
 };
 
 
