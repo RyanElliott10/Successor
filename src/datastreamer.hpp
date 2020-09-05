@@ -25,6 +25,7 @@ public:
     }
   }
 
+  // TODO: Handle/align historical data that starts at different timestamps (all should end at a constant timestamp)
   lud::candlestick_data_aggregate poll_next_stream() override
   {
     lud::candlestick_data_aggregate candles_;

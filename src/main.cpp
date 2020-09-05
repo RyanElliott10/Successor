@@ -7,14 +7,18 @@
 #include "datastreamer.hpp"
 #include "moving_average_strategy.hpp"
 
-constexpr std::string_view AAPL_CSV = "../data/aapl_daily.csv";
-constexpr std::string_view SQ_CSV = "../data/sq_daily.csv";
-constexpr std::string_view TSLA_CSV = "../data/tsla_minute.csv";
+constexpr std::string_view AAPL_CSV = "../data/daily/AAPL.csv";
+constexpr std::string_view SQ_CSV = "../data/daily/SQ.csv";
+constexpr std::string_view NVDA_CSV = "../data/daily/NVDA.csv";
+constexpr std::string_view CRON_CSV = "../data/daily/CRON.csv";
+constexpr std::string_view ZM_CSV = "../data/daily/ZM.csv";
+constexpr std::string_view TSLA_CSV = "../data/1m/TSLA.csv";
 
 int main()
 {
   const std::unordered_map<std::string, std::string_view> csvs = {
-          std::make_pair("AAPL", AAPL_CSV), std::make_pair("SQ", SQ_CSV)
+          std::make_pair("AAPL", AAPL_CSV), std::make_pair("SQ", SQ_CSV), std::make_pair("NVDA", NVDA_CSV),
+          std::make_pair("CRON", CRON_CSV), std::make_pair("ZM", ZM_CSV)
   };
   std::shared_ptr<lud::datastreamable> datastream_ = std::make_shared<datastreamer>(csvs);
   lud::exchange exchange_(datastream_, false);

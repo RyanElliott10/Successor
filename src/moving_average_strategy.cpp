@@ -6,6 +6,8 @@
 
 #include "moving_average_strategy.hpp"
 
+const static std::vector<std::string> s_instrument_tickers {"AAPL", "SQ", "NVDA", "CRON", "ZM"};
+
 void moving_average_strategy::trade()
 {
   abstract_strategy::trade();
@@ -23,12 +25,11 @@ void moving_average_strategy::notify_of_market_event(lud::market_event &event)
 
 void moving_average_strategy::handle_market_data(const lud::candlestick_data_aggregate &data)
 {
-  std::string interested_security_ = std::rand() % 2 == 1 ? "AAPL" : "SQ";
+  std::string interested_security_ = s_instrument_tickers[std::rand() % 4];
   lud::order_lifetime lifetime(lud::enums::order::lifetime_durations::DAY, data.at(interested_security_).m_timestamp);
   if (m_portfolio->soft_verify_capital(data.at(interested_security_).m_close)) {
     place_limit_order(interested_security_, 1, lud::enums::order::signals::BUY, lud::enums::order::position_types::LONG,
-                      lifetime,
-                      data.at(interested_security_).m_close);
+                      lifetime, data.at(interested_security_).m_close);
   }
   if (std::rand() % 10 > 8 && m_portfolio->soft_verify_shares(interested_security_, 1)) {
     place_limit_order(interested_security_, 1, lud::enums::order::signals::SELL,
