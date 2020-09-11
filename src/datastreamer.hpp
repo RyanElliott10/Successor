@@ -26,9 +26,9 @@ public:
     }
 
     // TODO: Handle/align historical data that starts at different timestamps (all should end at a constant timestamp)
-    lud::candlestick_data_aggregate poll_next_stream() override
+    lud::candlestick_data_aggregate<std::string> poll_next_stream() override
     {
-        lud::candlestick_data_aggregate candles_;
+        lud::candlestick_data_aggregate<std::string> candles_;
         std::string timestamp_;
         float open_, high_, low_, close_;
         uint32_t volume_;
